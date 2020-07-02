@@ -13,7 +13,6 @@
         andriod:layout_centerVertical="true"
         andriod:background="@drawable/home"
     />
-    //
     <TextView
         andriod:id="@+id/title_city"
         andriod:layout_width="wrap_content"
