@@ -1,4 +1,4 @@
-package com.example.sunnyweather.util;
+package com.example.sunnyweather.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -10,6 +10,8 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.example.sunnyweather.gson.Weather;
+import com.example.sunnyweather.util.HttpUtil;
+import com.example.sunnyweather.util.Utility;
 
 import org.jetbrains.annotations.NotNull;
 

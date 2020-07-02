@@ -27,7 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.sunnyweather.gson.Forecast;
 import com.example.sunnyweather.gson.Weather;
 
-import com.example.sunnyweather.util.AutoUpdateService;
+import com.example.sunnyweather.service.AutoUpdateService;
 import com.example.sunnyweather.util.HttpUtil;
 import com.example.sunnyweather.util.Utility;
 
@@ -111,18 +111,17 @@ public class WeatherActivity extends AppCompatActivity {
             showWeatherInfo(weather);
         }else {
             //无缓存时去服务器查询天气
-            weatherId = getIntent().getStringExtra("weather_id");
+//            weatherId = getIntent().getStringExtra("weather_id");
             weatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(weatherId);
         }
 
-        final String finalWeatherId = weatherId;
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.
                 OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestWeather(finalWeatherId);
+                requestWeather(weatherId);
             }
         });
 
@@ -263,3 +262,4 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
 }
+
