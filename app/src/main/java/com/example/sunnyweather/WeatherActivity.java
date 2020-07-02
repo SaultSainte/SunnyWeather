@@ -100,7 +100,7 @@ public class WeatherActivity extends AppCompatActivity {
                 (this);
         String weatherString = prefs.getString("weather", null);
 
-        final String weatherId;
+        String weatherId;
 
         if (weatherString != null){
             //有缓存时直接解析天气数据
@@ -112,16 +112,17 @@ public class WeatherActivity extends AppCompatActivity {
         }else {
             //无缓存时去服务器查询天气
             weatherId = getIntent().getStringExtra("weather_id");
-           String weatherId = getIntent().getStringExtra("weather_id");
+            weatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(weatherId);
         }
 
+        final String finalWeatherId = weatherId;
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.
                 OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestWeather(weatherId);
+                requestWeather(finalWeatherId);
             }
         });
 
@@ -145,7 +146,7 @@ public class WeatherActivity extends AppCompatActivity {
      *根据天气id请求城市天气信息
      */
 
-    private void requestWeather(final String weatherId) {
+    public void requestWeather(final String weatherId) {
         String weatherUrl = "http://guolin.tech/api/weather?cityid="
                 + weatherId + "&key=bc0418b57b2d4918819d3974ac1285d9";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
