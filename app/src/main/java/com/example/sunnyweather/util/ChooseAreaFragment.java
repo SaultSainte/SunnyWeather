@@ -101,19 +101,20 @@ private int currentLevel;
             } else if (currentLevel == LEVEL_CITY) {
                 selectedCity = cityList.get(position);
                 queryCounties();
-            }else if (currentLevel == LEVEL_CITY){
+            }else if (currentLevel == LEVEL_COUNTY){
                 String weatherId = countyList.get(position).getWeatherId();
-
                 if (getActivity() instanceof MainActivity){
-                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                    intent.putExtra("weather_id", weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+
+                Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                intent.putExtra("weather_id", weatherId);
+                startActivity(intent);
+                getActivity().finish();
+
                 }else if (getActivity() instanceof WeatherActivity){
                     WeatherActivity activity = (WeatherActivity) getActivity();
                     activity.drawerLayout.closeDrawers();
                     activity.swipeRefresh.setRefreshing(true);
-                    activity.requestWearher(weatherId);
+                    activity.requestWeather(weatherId);
                 }
 //503
 
@@ -204,7 +205,7 @@ private void queryFromServer(String address,final String type) {
     showProgressDialog();
     HttpUtil.sendOkHttpRequest(address, new Callback() {
         @Override
-        public void onResponse(Call call, Response response) throws IOException {
+        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             String responseText = response.body().string();
             boolean result = false;
             if ("province".equals(type)) {
@@ -234,7 +235,7 @@ private void queryFromServer(String address,final String type) {
         }
 
         @Override
-        public void onFailure(Call call, IOException e) {
+        public void onFailure(@NotNull Call call,@NotNull IOException e) {
             //通过runOnUIThread（）方法回到主线程处理逻辑
             getActivity().runOnUiThread(new Runnable() {
                 @Override

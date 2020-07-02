@@ -21,10 +21,6 @@ import okhttp3.Response;
 
 public class AutoUpdateService extends Service {
 
-
-    public AutoUpdateService() {
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
 return null;
@@ -57,23 +53,26 @@ return null;
             Weather weather = Utility.handleWeatherResponse(weatherString);
             String weatherId = weather.basic.weatherId;
 
-            String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=bc0418b57b2d4918819d3974ac1285d9";
+            String weatherUrl = "http://guolin.tech/api/weather?cityid=" +
+                    weatherId + "&key=bc0418b57b2d4918819d3974ac1285d9";
             HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
                 @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                   e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws
+                        IOException {
                     String responseText = response.body().string();
                     Weather weather = Utility.handleWeatherResponse(responseText);
                     if (weather != null && "ok".equals(weather.status)){
-                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(AutoUpdateService.this).edit();
+                        SharedPreferences.Editor editor = PreferenceManager.
+                             getDefaultSharedPreferences(AutoUpdateService.this).
+                                edit();
                         editor.putString("weather", responseText);
                         editor.apply();
                     }
+                }
+
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -89,14 +88,16 @@ return null;
         String requestBingPic = "http://guolin.tech/api/bing_pic";
         HttpUtil.sendOkHttpRequest(requestBingPic, new Callback(){
             @Override
-            public void onResponse(Call call, Response response) throws  IOException{
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws
+                    IOException{
                 String bingPic = response.body().string();
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(AutoUpdateService.this).edit();
+                SharedPreferences.Editor editor = PreferenceManager.
+                        getDefaultSharedPreferences(AutoUpdateService.this).edit();
                 editor.putString("bing_pic", bingPic);
                 editor.apply();
             }
             @Override
-            public void onFailure(Call call, IOException e){
+            public void onFailure(@NotNull Call call, @NotNull IOException e){
                 e.printStackTrace();
             }
         });
