@@ -23,7 +23,7 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
-        android:Layout_w1dth="match_parent"
+        android:Layout_width="match_parent"
         android:layout_height="match_parent">
 
 
