@@ -27,8 +27,6 @@ public class Utility {
                     province.setProvinceName(provinceObject.getString ("name"));
                     province.setProvinceCode(provinceObject.getInt("id"));
                     province. save( ) ;
-
-
                 }
                 return true;
             } catch (JSONException e) {

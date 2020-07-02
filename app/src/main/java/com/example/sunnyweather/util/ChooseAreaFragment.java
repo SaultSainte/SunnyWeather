@@ -1,4 +1,4 @@
-package com.example.sunnyweather;
+package com.example.sunnyweather.util;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.sunnyweather.MainActivity;
+import com.example.sunnyweather.R;
+import com.example.sunnyweather.WeatherActivity;
 import com.example.sunnyweather.db.City;
 import com.example.sunnyweather.db.County;
 import com.example.sunnyweather.db.Province;
@@ -77,10 +80,12 @@ private int currentLevel;
     titleText = (TextView) view.findViewById(R.id.title_text);
     backButton = (Button) view.findViewById(R.id.back_button);
     listView = (ListView) view.findViewById(R.id.list_view);
-    adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, dataList);
-    listView. setAdapter(adapter);
+    adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,
+            dataList);
+    listView.setAdapter(adapter);
     return view;
 }
+
 @Override
     public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
@@ -91,6 +96,8 @@ private int currentLevel;
             if (currentLevel == LEVEL_PROVINCE) {
                 selectedProvince = provinceList.get(position);
                 queryCities();
+//503
+
             } else if (currentLevel == LEVEL_CITY) {
                 selectedCity = cityList.get(position);
                 queryCounties();
@@ -108,7 +115,7 @@ private int currentLevel;
                     activity.swipeRefresh.setRefreshing(true);
                     activity.requestWearher(weatherId);
                 }
-
+//503
 
             }
         }
@@ -137,7 +144,7 @@ private void queryProvinces(){
         for (Province province : provinceList){
             dataList.add(province.getProvinceName());
         }
-    adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         listView.setSelection(0);
         currentLevel = LEVEL_PROVINCE;
     }else {
@@ -151,7 +158,8 @@ private void queryProvinces(){
 private void queryCities(){
     titleText.setText(selectedProvince.getProvinceName());
     backButton.setVisibility(View.VISIBLE);
-    cityList = DataSupport.where("provinceid = ?", String.valueOf(selectedProvince.getId())).find(City.class);
+    cityList = DataSupport.where("provinceid = ?", String.valueOf
+            (selectedProvince.getId())).find(City.class);
 if (cityList.size() > 0){
     dataList.clear();
     for (City city : cityList){
@@ -171,10 +179,10 @@ if (cityList.size() > 0){
 */
 private void queryCounties(){
     titleText.setText(selectedCity.getCityName());
-    backButton. setVisibility(View.VISIBLE);
-    countyList = DataSupport.where("cityid = ?", String. valueOf (selectedCity.
-            getId())). find (County.class);
-if (cityList.size() > 0){
+    backButton.setVisibility(View.VISIBLE);
+    countyList = DataSupport.where("cityid = ?", String.valueOf
+            (selectedCity.getId())). find(County.class);
+if (countyList.size() > 0){
     dataList.clear();
     for (County county : countyList){
         dataList.add(county.getCountyName());
@@ -185,27 +193,28 @@ if (cityList.size() > 0){
 }else {
     int provinceCode = selectedProvince.getProvinceCode() ;
     int cityCode = selectedCity.getCityCode();
-    String address = "http://guolin.tech/api/china/" + provinceCode + "/" + cityCode ;
+    String address = "http://guolin.tech/api/china/" + provinceCode + "/" + cityCode;
     queryFromServer(address, "county");
 }
 }
     /**
      *根据传入的地址和类型从服务器上查询省市县数据
      */
-private void queryFromServer(String address,final  String type) {
+private void queryFromServer(String address,final String type) {
     showProgressDialog();
     HttpUtil.sendOkHttpRequest(address, new Callback() {
-
         @Override
-        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+        public void onResponse(Call call, Response response) throws IOException {
             String responseText = response.body().string();
             boolean result = false;
             if ("province".equals(type)) {
                 result = Utility.handleProvinceResponse(responseText);
             } else if ("city".equals(type)) {
-                result = Utility.handleCityResponse(responseText, selectedProvince.getId());
+                result = Utility.handleCityResponse(responseText,
+                        selectedProvince.getId());
             } else if ("county".equals(type)) {
-                result = Utility.handleCountyResponse(responseText, selectedCity.getId());
+                result = Utility.handleCountyResponse(responseText,
+                        selectedCity.getId());
             }
             if (result) {
                 getActivity().runOnUiThread(new Runnable() {
